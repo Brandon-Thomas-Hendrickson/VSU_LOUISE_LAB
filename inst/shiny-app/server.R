@@ -916,7 +916,7 @@ ggplot(rank_data, aes(x = reorder(Species, -Total_Abundance),
         obs_data$date <- as.Date(obs_data$observed_on)
         obs_data <- obs_data[!is.na(obs_data$date), ]
 
-        twelve_months_ago <- Sys.Date() - 365
+        twelve_months_ago <- Sys.Date() - 1095
         obs_data <- obs_data[obs_data$date >= twelve_months_ago, ]
         
         if (nrow(obs_data) > 0) {
