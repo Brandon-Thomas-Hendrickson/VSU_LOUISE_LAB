@@ -1,0 +1,128 @@
+---
+title: "Bird Community Diversity at [Selected Study Site]"
+author:
+  - name: "[Author Name]"
+    affiliations:
+      - name: "Department of Biology, Valdosta State University"
+date: "[Submission date]"
+keywords:
+  - bird community
+  - avian diversity
+  - point-count survey
+  - iNaturalist
+format:
+  pdf:
+    documentclass: article
+    pdf-engine: xelatex
+    fontsize: 11pt
+    geometry: margin=1in
+    colorlinks: true
+    number-sections: false
+    include-in-header:
+      text: |
+        \usepackage[switch]{lineno}
+        \linenumbers
+        \renewcommand\linenumberfont{\normalfont\tiny\color{gray}}
+---
+
+# Abstract
+
+- What ecological question did this study address, and which study site was selected?
+- What survey and comparison methods were used?
+- What were the main patterns in species richness, diversity, abundance, and species accumulation?
+- How did the field-survey results compare with iNaturalist observations?
+- What do the results suggest about bird detection, habitat coverage, and future sampling?
+
+**Keywords:** Which 3–6 terms best help readers find this study?
+
+# Introduction
+
+- What ecological question can be addressed by comparing your bird survey with community-science observations from Lake Louise Experimental Station or Valdosta State University?
+- Which site did you choose, and what makes its habitat and bird community suitable for this comparison?
+- How might foraging theory help explain why bird species use particular places or resources?
+- How might species’ niche requirements influence which species occur at your chosen site?
+- How might habitat selection explain where birds are observed within the site?
+- How can resource partitioning reduce competition and allow species with different resource-use strategies to coexist?
+- What evidence would you expect if multiple species can coexist because they use different resources, habitats, or foraging strategies?
+- What predictions follow from comparing your standardized survey with iNaturalist observations in the same area?
+
+# Methods
+
+## Study site
+
+- Which site did you select: Lake Louise Experimental Station or Valdosta State University?
+- Where is the site located, and what habitat types occur along the sampled routes?
+- What features of the site could influence the bird species detected during the survey?
+- How were the transects arranged, and how will the transect map or campus figure be used to describe their placement?
+- At Lake Louise, which road trails were surveyed, and how did staying on the trails shape the habitats sampled?
+- On the Valdosta State University campus, which areas were crossed by the transects, and how did campus land use shape the habitats sampled?
+
+## Field survey
+
+- On what date and at what time was the survey conducted?
+- How many 200 m transects were surveyed, and how were they selected?
+- How did observers move along each transect, stop every 20 m, and conduct a 3-minute point count at each stop?
+- How were bird calls recorded with the Merlin app, and how were visual detections made with binoculars?
+- How were species identities and numbers of individuals recorded at each point count?
+- How were birds handled if they were heard but not seen, seen but not heard, or detected at more than one point?
+- What weather, observer, equipment, or other conditions could have affected detection?
+
+## Data analysis
+
+- How were the field observations organized into a transect-by-species abundance table?
+- How was species richness (alpha diversity) calculated for each transect?
+- How were Shannon and Simpson diversity calculated for each transect and for the full survey?
+- How were differences in abundance among species and variation among transects summarized?
+- How was the sampling curve constructed, and what does its shape indicate about species accumulation as sampling effort increased?
+- How was the rank-abundance curve constructed, and how were the most and least abundant species identified?
+- Which iNaturalist records were included for comparison, and how were records matched to the selected site and survey period?
+- How were overall diversity values from the field survey and iNaturalist data compared?
+- How was the monthly diversity graphic used to assess whether temporal differences in sampling could explain differences in species detections?
+- How was the iNaturalist observation map used to assess whether spatial coverage could explain differences in species detections?
+- How were iNaturalist locations in habitats not covered by the field transects, such as lake edges or forest interiors, identified?
+- What limitations arise when comparing a brief standardized survey with opportunistic iNaturalist observations?
+
+# Results
+
+## Field-survey biodiversity
+
+- How many individuals and species were recorded in the survey overall?
+- What were the alpha diversity, Shannon diversity, and Simpson diversity values for each transect and for the survey overall?
+- How did diversity and total abundance vary among transects?
+- Which species had the highest and lowest observed abundances?
+- Which species was most common in the survey, and how much did it contribute to the total observations?
+- What pattern does the rank-abundance curve show about dominance and evenness in the observed community?
+- How did the sampling curve change as point counts accumulated?
+- Did the sampling curve approach an apparent plateau, or did new species continue to appear near the end of sampling?
+- Which tables, figures, or summary statistics best communicate these results?
+
+## Comparison with iNaturalist observations
+
+- How did the total number of species and overall diversity in the field survey compare with the iNaturalist data?
+- Which species were detected by both methods, and which were recorded by only one?
+- Were species missed by the field survey concentrated in particular months in the monthly diversity comparison?
+- Do monthly patterns suggest that the timing of the field survey could explain some differences in detected species?
+- Where were iNaturalist observations located relative to the field transects?
+- Were iNaturalist-only species observed mainly in areas the survey did not cover, such as lake edges or forest interiors?
+- What do the diversity comparison, monthly graphic, and observation map each show about differences between the datasets?
+
+# Discussion
+
+- What are the main findings from the field survey and its comparison with iNaturalist observations?
+- Why might iNaturalist records include species that were not detected during the field survey?
+- How could sampling at approximately 2:00 PM have affected the probability of detecting birds that are more active in the morning or late afternoon?
+- How could differences in sampling dates, duration, observer effort, habitat coverage, or detection method explain differences between the datasets?
+- How might foraging behavior, niche requirements, and habitat selection help explain the species and patterns observed at the chosen site?
+- Do the observations provide evidence consistent with resource partitioning and coexistence, or are additional data needed to evaluate that explanation?
+- How could future surveys improve detection by sampling in the morning and late afternoon, increasing the number of transects or visits, or extending the survey period?
+- Which additional habitats should be sampled to improve spatial coverage?
+- Which additional observation methods could help detect birds that are difficult to see or hear during point counts?
+- Would baits, traps, or mist nets be appropriate for a future study, and what permits, animal-care requirements, and sampling biases would need to be considered?
+- What conclusions are supported by these data, and what limitations should temper those conclusions?
+- What specific follow-up study would best test the ecological explanations raised by this survey?
+
+# References
+
+- Which sources support the discussion of foraging theory, niche requirements, habitat selection, and species coexistence?
+- Which sources describe the study sites, bird-survey methods, Merlin app, or iNaturalist data used in this study?
+- Have all sources cited in the manuscript been included here, and has every reference listed here been cited in the manuscript?
