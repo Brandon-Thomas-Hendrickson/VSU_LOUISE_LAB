@@ -194,7 +194,7 @@ create_sampling_curve <- function(data) {
 fetch_inaturalist_data <- function(location = NULL, bounds = NULL) {
 
   end_date <- Sys.Date()
-  start_date <- end_date - 1095
+  start_date <- end_date - 1825
   
 
   fetch_chunked_data <- function(bounds, start_date, end_date, chunk_days = 30) {
@@ -916,62 +916,65 @@ ggplot(rank_data, aes(x = reorder(Species, -Total_Abundance),
         obs_data$date <- as.Date(obs_data$observed_on)
         obs_data <- obs_data[!is.na(obs_data$date), ]
 
-        twelve_months_ago <- Sys.Date() - 1095
-        obs_data <- obs_data[obs_data$date >= twelve_months_ago, ]
+        lookback_days <- 1825L
+        date_cutoff <- Sys.Date() - lookback_days
+        obs_data <- obs_data[obs_data$date >= date_cutoff, ]
         
         if (nrow(obs_data) > 0) {
-          obs_data$year_month <- format(obs_data$date, "%Y-%m")
-          monthly_diversity <- obs_data %>%
-            group_by(year_month) %>%
+          monthly_observed <- obs_data %>%
+            mutate(
+              month_number = as.integer(format(date, "%m")),
+              month = factor(month.abb[month_number], levels = month.abb)
+            ) %>%
+            group_by(month_number, month) %>%
             summarise(
               shannon_diversity = vegan::diversity(table(scientific_name), index = "shannon"),
               species_count = n_distinct(scientific_name),
               total_obs = n(),
               .groups = 'drop'
-            )
-
-          monthly_diversity$date <- as.Date(paste0(monthly_diversity$year_month, "-01"))
-
-          monthly_diversity <- monthly_diversity[monthly_diversity$date >= twelve_months_ago, ]
-          monthly_diversity <- monthly_diversity[order(monthly_diversity$date), ]
+            ) %>%
+            arrange(month_number)
           
-          if (nrow(monthly_diversity) == 0) {
+          if (nrow(monthly_observed) == 0) {
             return(plotly::plot_ly() %>% 
-                   plotly::add_text(x = 0.5, y = 0.5, text = "No data available for the past 12 months", 
+                   plotly::add_text(x = 0.5, y = 0.5, text = paste("No data available in the past", lookback_days, "days"), 
                                   textfont = list(size = 14)) %>%
                    plotly::layout(showlegend = FALSE))
           }
           
-          p <- ggplot(monthly_diversity, aes(x = date, y = shannon_diversity)) +
-            geom_line(color = "#4f34feff", size = 1.2) +
-            geom_point(color = "#162432ff", size = 3, alpha = 0.7) +
-            labs(title = "Monthly Shannon Diversity - Past 12 Months",
-                 subtitle = paste("Based on", sum(monthly_diversity$total_obs), "iNaturalist observations"),
+          # Draw lines only between adjacent calendar months that have data.
+          adjacent_months <- which(diff(monthly_observed$month_number) == 1L)
+          line_segments <- data.frame(
+            start_month = monthly_observed$month_number[adjacent_months],
+            end_month = monthly_observed$month_number[adjacent_months + 1L],
+            start_shannon = monthly_observed$shannon_diversity[adjacent_months],
+            end_shannon = monthly_observed$shannon_diversity[adjacent_months + 1L]
+          )
+
+          p <- ggplot() +
+            geom_segment(data = line_segments,
+                         aes(x = start_month, xend = end_month,
+                             y = start_shannon, yend = end_shannon),
+                         color = "#4f34feff", linewidth = 1.2) +
+            geom_point(data = monthly_observed,
+                       aes(x = month_number, y = shannon_diversity),
+                       color = "#162432ff", size = 3, alpha = 0.7) +
+            labs(title = "Monthly Shannon Diversity (Years Aggregated)",
+                 subtitle = paste("Past", lookback_days, "days; years pooled within calendar month;",
+                                  sum(monthly_observed$total_obs), "iNaturalist observations"),
                  x = "Month", y = "Shannon Diversity Index") +
             theme_light() +
-            scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +
+            scale_x_continuous(breaks = 1:12, labels = month.abb,
+                               limits = c(1, 12), expand = expansion(mult = 0.01)) +
             theme(axis.text.x = element_text(angle = 45, hjust = 1))
           
           if (!is.null(values$diversity_results)) {
             user_avg_shannon <- mean(values$diversity_results$Shannon_Diversity, na.rm = TRUE)
-            current_month <- as.Date(format(Sys.Date(), "%Y-%m-01"))
-            
-            p <- p + 
-              geom_point(aes(x = current_month, y = user_avg_shannon), 
-                        color = "#fd1e06ff", size = 6, shape = 17) +
-              annotate("text", x = current_month, y = user_avg_shannon + 0.3, 
-                      label = "Your Survey Data", color = "#120706ff", 
-                      fontface = "bold", hjust = 0.5)
-          }
-          
-          if (nrow(monthly_diversity) > 0) {
-            latest_month <- monthly_diversity[nrow(monthly_diversity), ]
-            p <- p + 
-              geom_point(aes(x = latest_month$date, y = latest_month$shannon_diversity), 
-                        color = "#3012f3ff", size = 6, shape = 16) +
-              annotate("text", x = latest_month$date, y = latest_month$shannon_diversity + 0.3, 
-                      label = "Latest iNaturalist", color = "#141009ff", 
-                      fontface = "bold", hjust = 0.5)
+            p <- p +
+              geom_hline(yintercept = user_avg_shannon, color = "#fd1e06ff",
+                         linetype = "dashed", linewidth = 1) +
+              labs(caption = paste("Red dashed line: mean field-survey Shannon diversity =",
+                                   round(user_avg_shannon, 3)))
           }
           
           return(ggplotly(p))
@@ -1244,6 +1247,8 @@ ggplot(rank_data, aes(x = reorder(Species, -Total_Abundance),
 
   output$inaturalist_code <- renderText({
     plot_type <- input$inaturalist_plot_type %||% "bar_species"
+    # Always return character text, even when a plot type has no example code.
+    code <- ""
     
     if (plot_type == "bar_species") {
       code <- '# Clickable Bar Chart of iNaturalist Species (Dynamic)
@@ -1273,6 +1278,25 @@ p <- ggplot(comparison_df, aes(x = Source, y = Shannon_Diversity, fill = Type)) 
 
 ggplotly(p)'
   
+    } else if (plot_type == "monthly_diversity") {
+      code <- '# Monthly Shannon Diversity
+library(dplyr)
+library(ggplot2)
+library(vegan)
+
+# Pool observations from the selected years within each calendar month.
+monthly_observed <- observations %>%
+  mutate(month_number = as.integer(format(as.Date(observed_on), "%m"))) %>%
+  group_by(month_number) %>%
+  summarise(
+    shannon_diversity = vegan::diversity(table(scientific_name), index = "shannon"),
+    .groups = "drop"
+  )
+
+ggplot(monthly_observed, aes(x = month_number, y = shannon_diversity)) +
+  geom_line() + geom_point() +
+  scale_x_continuous(breaks = 1:12, labels = month.abb) +
+  theme_light()'
     } else if (plot_type == "interactive_map") {
       code <- '# Interactive Species Map with Selection Table
 library(leaflet)
