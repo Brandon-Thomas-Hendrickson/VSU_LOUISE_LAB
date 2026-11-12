@@ -70,6 +70,7 @@ lapply(required_packages, library, character.only = TRUE)
 4. Run the following command in the R console:
 
 ```r
+setwd("VSU_LOUISE_LAB")
 library(shiny)
 runApp('inst/shiny-app')
 ```
